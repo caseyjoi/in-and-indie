@@ -20,7 +20,7 @@ app = Flask(__name__)
 def get_recommendations(steam_id):
     """
     The main endpoint React will call. 
-    Usage: fetch('/api/recommendations/76561198924137021')
+    Usage: fetch('/api/recommendations/')
     """
     try:
         # Save and update user data, first time users saved while returning users load from cache
