@@ -1,5 +1,7 @@
 import os
 import requests
+import re
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 load_dotenv()

@@ -12,6 +12,7 @@ sys.path.append(str(project_root / "db_conn"))
 import DB
 import igdb
 from youtube import get_trailer_url
+from brave import find_game_communities
 
 app = Flask(__name__)
 
@@ -23,8 +24,14 @@ def get_recommendations(steam_id):
     """
     try:
         # Save and update user data, first time users saved while returning users load from cache
-        DB.save_to_db(steam_id)
-        df_top_games = DB.update_game(steam_id)
+        df_top_games = DB.check_in_db(steam_id)
+        
+        if df_top_games is None:
+            print(f"New user {steam_id}. Fetching from Steam...")
+            DB.save_to_db(steam_id)
+            df_top_games = DB.update_game(steam_id)
+        else:
+            print(f"Returning user {steam_id}. Loading from cache...")
         
         if df_top_games is None or df_top_games.empty:
             return jsonify({"error": "No games found or Steam profile is private."}), 404
@@ -43,8 +50,22 @@ def get_recommendations(steam_id):
         # Add YouTube trailers
         for rec in recommendations:
             rec["trailer_url"] = get_trailer_url(rec["name"])
-            # PLACEHOLDER Brave Search function
-            rec["community_links"] = [] 
+            
+            # Fetch community links from Brave
+            community_data = find_game_communities(rec["name"])
+            clean_communities = []
+            
+            # Output is {"reddit": [...], "fandom": [...], "discord": [...]}, grab the Top 1 link to easily map them as buttons
+            for platform, links in community_data.items():
+                if links and len(links) > 0:
+                    top_link = links[0]
+                    clean_communities.append({
+                        "platform": platform,
+                        "title": top_link.get("title"),
+                        "url": top_link.get("url")
+                    })
+                    
+            rec["community_links"] = clean_communities
 
         # Send the JSON to react
         return jsonify({
