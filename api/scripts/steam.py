@@ -40,7 +40,9 @@ STEAM_TO_IGDB_MAP = {
     "Card Game": {"id": 35, "type": "genres"},
     "Comedy": {"id": 27, "type": "themes"},
     "Historical": {"id": 22, "type": "themes"},
-    "Romance": {"id": 44, "type": "themes"}
+    "Romance": {"id": 44, "type": "themes"},
+    "2D Fighter": {"id": 4, "type": "genres"}, # Maps to Fighting
+    "Indie": {"id": 32, "type": "genres"}
 }
 
 api = os.getenv("STEAM_API_KEY")
@@ -59,7 +61,7 @@ def user_profile(steam_id: str) -> list:
 
     # Check if account details are private
     if not api_response or "games" not in api_response:
-        raise ValueError("Could not retrieve game data for SteamID ${steam_id}. The user's profile, game library, or playtime settings are likely set to Private.")
+        raise ValueError(f"Could not retrieve game data for SteamID {steam_id}. The user's profile, game library, or playtime settings are likely set to Private.")
     
     all_games = api_response.get("games", [])
 
