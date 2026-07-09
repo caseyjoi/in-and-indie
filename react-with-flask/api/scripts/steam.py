@@ -45,6 +45,39 @@ STEAM_TO_IGDB_MAP = {
     "Indie": {"id": 32, "type": "genres"}
 }
 
+IGDB_REVERSE_MAP = {
+    "2:genres": "Point-and-Click",
+    "4:genres": "Fighting",
+    "5:genres": "Shooter",
+    "8:genres": "Platform",
+    "9:genres": "Puzzle",
+    "10:genres": "Racing",
+    "12:genres": "Role-playing (RPG)",
+    "13:genres": "Simulator",
+    "14:genres": "Sport",
+    "15:genres": "Strategy",
+    "25:genres": "Hack and Slash/Beat 'em Up",
+    "31:genres": "Adventure",
+    "32:genres": "Indie",
+    "33:genres": "Arcade",
+    "34:genres": "Visual Novel",
+    "35:genres": "Card & Board Game",
+    "36:genres": "MOBA",
+    
+    "1:themes": "Action",
+    "17:themes": "Fantasy",
+    "18:themes": "Science Fiction",
+    "19:themes": "Horror",
+    "21:themes": "Survival",
+    "22:themes": "Historical",
+    "23:themes": "Stealth",
+    "27:themes": "Comedy",
+    "33:themes": "Sandbox",
+    "38:themes": "Open World",
+    "43:themes": "Mystery",
+    "44:themes": "Romance"
+}
+
 api = os.getenv("STEAM_API_KEY")
 url = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/"
 

@@ -84,7 +84,7 @@ def update_game(steam_id, limit=5):
 
     for _, row in df.iterrows():
         if pd.isna(row["igdb_rating"]):
-            rating = get_rating(row["name"])
+            rating = get_rating(row["name"], int(row["appid"]))
             with engine.begin() as conn:
                 conn.execute(update_sql, {
                     "tag1": row["tag1"] if not pd.isna(row["tag1"]) else None,
