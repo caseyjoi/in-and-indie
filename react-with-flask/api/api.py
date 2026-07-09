@@ -1,6 +1,7 @@
 # api/api.py
 from flask import Flask, jsonify, request
 import sys
+import time
 from pathlib import Path
 
 # Path Setup, since api.py is inside the 'api' folder, 'parent' is the api folder itself.
@@ -15,6 +16,13 @@ from youtube import get_trailer_url
 from brave import find_game_communities
 
 app = Flask(__name__)
+
+
+@app.route('/api/time')
+def get_current_time():
+    return {'time': time.time()}
+
+
 
 @app.route('/api/recommendations/<steam_id>', methods=['GET'])
 def get_recommendations(steam_id):
