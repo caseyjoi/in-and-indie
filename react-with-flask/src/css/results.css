@@ -192,6 +192,7 @@ section h2 {
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.2s, border-color 0.2s, color 0.2s;
+    text-transform: capitalize;
 }
 
 /* button highlight*/

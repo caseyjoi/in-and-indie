@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Results from './results'
 import './css/results.css'
-import './css/App.css'
 
 function App() {
 

@@ -26,7 +26,7 @@ const MOCK_API_RESPONSE = {
             "name": "Lethal League Blaze",
             "rating": 9,
             "steam_link": "https://store.steampowered.com/app/553310",
-            "trailer_url": null
+            "trailer_url": "https://www.youtube.com/embed/P6pFdeZg8LI?si=XxMcjWAPVOXhMoFC"
         },
         {
             "community_links": [
@@ -51,7 +51,7 @@ const MOCK_API_RESPONSE = {
             "name": "Neon White",
             "rating": 8.6,
             "steam_link": "https://store.steampowered.com/app/1533420",
-            "trailer_url": null
+            "trailer_url": "https://www.youtube.com/embed/P6pFdeZg8LI?si=XxMcjWAPVOXhMoFC"
         },
         {
             "community_links": [
@@ -380,11 +380,13 @@ function Results() {
             <section>
                 <h2> Your 5 top games: </h2>
 
+
+
                 <div className="top-games">
 
                     {Array.isArray(top5Games) && top5Games.map((game) => (
                         <div key={game.name} className="top-game">
-                            <img className="game-cover-thumbnail" src="url" />
+                            <img className="game-cover-thumbnail" src={`https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/${game.appid}/library_600x900.jpg`}/>
                             <div className="top-game-details">
                                 <strong> {game.name} </strong>
                                 <span> {game.playtime ? `${game.playtime} minutes` : "Never played"} </span>
@@ -402,11 +404,22 @@ function Results() {
 
             <h2> Based on your top genres, we recommended these games: </h2>
 
-            {Array.isArray(recommendations) && recommendations.map ((rec) => (
 
+            {Array.isArray(recommendations) && recommendations.map ((rec) => (
             <div key={rec.name} className="rec-card">
                 <div className="rec-trailer-or-img">
-                    {rec.cover_url && (<img src={rec.cover_url} alt ="game content"/>)}
+                    {rec.trailer_url ? (
+                    <iframe 
+                        width="250" 
+                        height="146" 
+                        src={rec.trailer_url} 
+                        title="YouTube video player" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerPolicy="strict-origin-when-cross-origin" 
+                        allowFullScreen>
+                        </iframe>) 
+                    : (rec.cover_url && <img src={rec.cover_url} alt ="game content"/>)}
                 </div>
 
                 <div className="rec-card-details">
