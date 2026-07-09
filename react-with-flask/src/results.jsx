@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './css/results.css'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 /*
 const MOCK_API_RESPONSE = {
@@ -155,7 +155,8 @@ const MOCK_API_RESPONSE = {
     }
   ]
 }
-*/
+  */
+
 
 function watchURLToEmbedURL(url) {
     if (!url) {
@@ -174,27 +175,55 @@ function Results() {
     const [top5Games, setTop5Games] = useState({});
     const [recommendations, setRecommendations] = useState({})
     const {userSteamId} = useParams()
+    const [error, setError] = useState(null)
+    const navigator = useNavigate();
+
 
     console.log("the parameter is ", {userSteamId})
 
     useEffect(() => {
         //Commented out actual API call
         //current hardcoding a specific steam USER -> implement fetch(`/api/events/${day}`) format
-          
+        
             fetch(`/api/recommendations/${userSteamId}`)
             .then(res => res.json())
-            .then(data => {
-                setTop5Games(data.user_games);
-                setRecommendations(data.recommendations);
+            .then(data => { 
+                if (data.user_games && data.user_games.length > 0) {
+                    setTop5Games(data.user_games);
+                    setRecommendations(data.recommendations);
+                } 
+                else {
+                    setTop5Games({});
+                    setRecommendations({});
+                    setError("There was an error with the user's steam ID.")
+                }
+            
             });
         
+        
         /*
-        //MOCK api response
+        //MOCK api response and error, functioning userSteamId = "76561198924137021"
         const data = MOCK_API_RESPONSE;
-        setTop5Games(data.user_games);
-        setRecommendations(data.recommendations);
+        if (userSteamId == "76561198924137021"){
+            setTop5Games(data.user_games);
+            setRecommendations(data.recommendations);
+        }
+        else {
+            setTop5Games({});
+            setRecommendations({});
+            setError("There was an error with the userid.")
+        }
         */
+
     }, []);
+
+    useEffect(() => {
+        if (error) {
+            navigator('/', {state: {message : "We couldn't find your Steam User Id. Please make sure your that the id is correct and the account is public."}});
+        } 
+    }, [error, navigator]); 
+
+    if (error) return null;
 
     return (
         <>
@@ -205,8 +234,6 @@ function Results() {
             <main>
                 <section>
                     <h2> Your 5 top games: </h2>
-
-
 
                     <div className="top-games">
 

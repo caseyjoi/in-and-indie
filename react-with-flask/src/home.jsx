@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
+import {Link} from 'react-router-dom'
 import './css/home.css'
 
+
+
 function Home(){
+    const[userSteamId, setUserSteamId] = useState("")
     return (
         <div  className="container">
 
@@ -10,9 +14,9 @@ function Home(){
 
             <p> Discover indie games based on your Steam library. </p>
 
-            <input type="text" placeholder="Enter Steam User ID"/>
+            <input type="text" placeholder="Enter Steam User ID" value={userSteamId} onChange={(change) => setUserSteamId(change.target.value)}/>
 
-            <button> Find Reccomendations </button>
+            <button onClick> <Link to={`/results/${userSteamId}`}> Find Reccomendations </Link></button>
         </div>
 
     </div>
