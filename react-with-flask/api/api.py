@@ -13,6 +13,7 @@ import DB
 import igdb
 from youtube import get_trailer_url
 from brave import find_game_communities
+from steam import IGDB_REVERSE_MAP
 
 app = Flask(__name__)
 
@@ -38,6 +39,24 @@ def get_recommendations(steam_id):
 
         # Convert Pandas to a list of dicts for JSON
         user_games = df_top_games.to_dict(orient="records")
+
+        # Translate truncated tags back to real tags
+        for game in user_games:
+            readable_tags = []
+            
+            for tag_key in ["tag1", "tag2", "tag3"]:
+                raw_tag = game.get(tag_key)
+                if raw_tag and raw_tag in IGDB_REVERSE_MAP:
+                    readable_tags.append(IGDB_REVERSE_MAP[raw_tag])
+                
+                # Delete truncated tag from the JSON payload
+                game.pop(tag_key, None)
+            
+            # Removes duplicates
+            unique_tags = list(dict.fromkeys(readable_tags))
+            
+            # Create a "genres" string like the recommendations (e.g., "Fighting, Visual Novel")
+            game["genres"] = ", ".join(unique_tags) if unique_tags else "Unknown"
 
         # Check most played games for common tags
         top_tags = DB.aggregate_tags(steam_id)
