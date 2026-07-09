@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './css/results.css'
-
+/*
 const MOCK_API_RESPONSE = {
     "recommendations": [
         {
@@ -348,7 +348,19 @@ const MOCK_API_RESPONSE = {
         }
     ]
 }
+*/
+function watchURLToEmbedURL(url){
+        if (!url) {
+            return "";
+        }
 
+        if (url.includes("watch?v=")){
+            let videoID = url.split("watch?v=");
+            videoID = videoID[1];
+            return `https://www.youtube.com/embed/${videoID}`;
+        }
+        return url;
+    };
 
 function Results() {
     const [top5Games, setTop5Games] = useState({});
@@ -357,19 +369,20 @@ function Results() {
     useEffect(() => {
         //Commented out actual API call
         //current hardcoding a specific steam USER -> implement fetch(`/api/events/${day}`) format*/
-        /*
+        
         fetch(`/api/recommendations/76561198924137021`)
         .then(res => res.json())
         .then(data => {
             setTop5Games(data.user_games);
             setRecommendations(data.recommendations);
         });
-        */
-
+        
+        /*
         //MOCK api response
         const data = MOCK_API_RESPONSE;
         setTop5Games(data.user_games);
-        setRecommendations(data.recommendations);
+        setRecommendations(data.recommendations); 
+        */
 
     }, []);
 
@@ -412,7 +425,7 @@ function Results() {
                     <iframe 
                         width="250" 
                         height="146" 
-                        src={rec.trailer_url} 
+                        src={watchURLToEmbedURL(rec.trailer_url)} 
                         title="YouTube video player" 
                         frameBorder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
