@@ -1,7 +1,6 @@
 # api/api.py
 from flask import Flask, jsonify, request
 import sys
-import time
 from pathlib import Path
 
 # Path Setup, since api.py is inside the 'api' folder, 'parent' is the api folder itself.
@@ -14,21 +13,15 @@ import DB
 import igdb
 from youtube import get_trailer_url
 from brave import find_game_communities
+from steam import IGDB_REVERSE_MAP
 
 app = Flask(__name__)
-
-
-@app.route('/api/time')
-def get_current_time():
-    return {'time': time.time()}
-
-
 
 @app.route('/api/recommendations/<steam_id>', methods=['GET'])
 def get_recommendations(steam_id):
     """
     The main endpoint React will call. 
-    Usage: fetch('/api/recommendations/76561198924137021')
+    Usage: fetch('/api/recommendations/')
     """
     try:
         # Save and update user data, first time users saved while returning users load from cache
@@ -46,6 +39,24 @@ def get_recommendations(steam_id):
 
         # Convert Pandas to a list of dicts for JSON
         user_games = df_top_games.to_dict(orient="records")
+
+        # Translate truncated tags back to real tags
+        for game in user_games:
+            readable_tags = []
+            
+            for tag_key in ["tag1", "tag2", "tag3"]:
+                raw_tag = game.get(tag_key)
+                if raw_tag and raw_tag in IGDB_REVERSE_MAP:
+                    readable_tags.append(IGDB_REVERSE_MAP[raw_tag])
+                
+                # Delete truncated tag from the JSON payload
+                game.pop(tag_key, None)
+            
+            # Removes duplicates
+            unique_tags = list(dict.fromkeys(readable_tags))
+            
+            # Create a "genres" string like the recommendations (e.g., "Fighting, Visual Novel")
+            game["genres"] = ", ".join(unique_tags) if unique_tags else "Unknown"
 
         # Check most played games for common tags
         top_tags = DB.aggregate_tags(steam_id)
@@ -88,4 +99,4 @@ def get_recommendations(steam_id):
 
 if __name__ == "__main__":
     # host='0.0.0.0' allows external access through Codio's proxy
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
