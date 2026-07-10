@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './css/results.css'
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 /*
 const MOCK_API_RESPONSE = {
@@ -157,7 +157,6 @@ const MOCK_API_RESPONSE = {
 }
   */
 
-
 function watchURLToEmbedURL(url) {
     if (!url) {
         return "";
@@ -174,60 +173,94 @@ function watchURLToEmbedURL(url) {
 function Results() {
     const [top5Games, setTop5Games] = useState({});
     const [recommendations, setRecommendations] = useState({})
-    const {userSteamId} = useParams()
+    const { userSteamId } = useParams()
     const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(true);
     const navigator = useNavigate();
 
-
-    console.log("the parameter is ", {userSteamId})
 
     useEffect(() => {
         //Commented out actual API call
         //current hardcoding a specific steam USER -> implement fetch(`/api/events/${day}`) format
-        
-            fetch(`/api/recommendations/${userSteamId}`)
-            .then(res => res.json())
-            .then(data => { 
-                if (data.user_games && data.user_games.length > 0) {
-                    setTop5Games(data.user_games);
-                    setRecommendations(data.recommendations);
-                } 
-                else {
-                    setTop5Games({});
-                    setRecommendations({});
-                    setError("There was an error with the user's steam ID.")
+        //define async fetch function 
+        const fetchData = async () => {
+            try {
+                setIsLoading(true);
+                setError(null);
+
+                const response = await fetch(`/api/recommendations/${userSteamId}`);
+
+                if (!response.ok) {
+                    throw new Error('API fetch failed.');
                 }
-            
-            });
-        
-        
-        /*
-        //MOCK api response and error, functioning userSteamId = "76561198924137021"
-        const data = MOCK_API_RESPONSE;
-        if (userSteamId == "76561198924137021"){
-            setTop5Games(data.user_games);
-            setRecommendations(data.recommendations);
-        }
-        else {
-            setTop5Games({});
-            setRecommendations({});
-            setError("There was an error with the userid.")
-        }
-        */
+
+                const result = await response.json();
+                setTop5Games(result.user_games);
+                setRecommendations(result.recommendations);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
 
     }, []);
 
-    useEffect(() => {
-        if (error) {
-            navigator('/', {state: {message : "We couldn't find your Steam User Id. Please make sure your that the id is correct and the account is public."}});
-        } 
-    }, [error, navigator]); 
+    //mock api response (no longer in the correct place)
+    /*
+    //MOCK api response and error, functioning userSteamId = "76561198924137021"
+    const data = MOCK_API_RESPONSE;
+    if (userSteamId == "76561198924137021"){
+        setTop5Games(data.user_games);
+        setRecommendations(data.recommendations);
+    }
+    else {
+        setTop5Games({});
+        setRecommendations({});
+        setError("There was an error with the userid.")
+    }
+    */
+    if (isLoading) {
 
-    if (error) return null;
+        return (
+<>
+
+                <div className="container">
+
+                    <div className="card">
+                        <div className="top-games"> Loading data, please wait...</div>
+                    </div>
+
+                </div>
+            </>
+
+        )
+    }
+
+    if (error) {
+        return (
+            <>
+
+                <div className="container">
+
+                    <div className="card">
+                        <div className="top-games">Error: {error}</div>
+                        <div className="top-game-details">We could not find your Steam User ID. Please make sure that your profile visibility is set to public and verify that the Steam User ID is correct. </div>
+                        
+                        <button className="a" onClick> <Link to={'/'}>Return to Home Page</Link></button>
+                    </div>
+
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
             {/*<pre>{JSON.stringify(top5Games, null, 2)}</pre>*/}
+            <div className="dashboard-wrapper">
             <header>
                 <h1> Welcome!</h1>
             </header>
@@ -301,7 +334,11 @@ function Results() {
                         </div>
                     ))}
                 </section>
+                    <div className="card">
+                        <button className="a" onClick> <Link to={'/'}>Return to Home Page</Link></button>
+                    </div>
             </main>
+            </div>
         </>
     )
 

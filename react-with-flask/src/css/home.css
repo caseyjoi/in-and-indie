@@ -115,3 +115,11 @@ body {
 .card button:active {
     transform: scale(0.98); 
 }
+
+.card button a {
+    color: inherit;         
+    text-decoration: none;   
+    display: inline-block;
+    width: 100%;            
+    height: 100%;
+}

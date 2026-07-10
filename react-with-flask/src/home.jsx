@@ -7,7 +7,7 @@ import './css/home.css'
 function Home(){
     const[userSteamId, setUserSteamId] = useState("")
     return (
-        <div  className="container">
+        <div className="container">
 
         <div className="card">
             <h1> In and Indie </h1>
@@ -16,7 +16,7 @@ function Home(){
 
             <input type="text" placeholder="Enter Steam User ID" value={userSteamId} onChange={(change) => setUserSteamId(change.target.value)}/>
 
-            <button onClick> <Link to={`/results/${userSteamId}`}> Find Reccomendations </Link></button>
+            <button className="a" onClick> <Link to={`/results/${userSteamId}`}> Find Reccomendations </Link></button>
         </div>
 
     </div>
