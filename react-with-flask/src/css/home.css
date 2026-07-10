@@ -13,12 +13,17 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh; 
+    width: 100vw;
 }
 
 .container {
     width: 100%;
     max-width: 500px;
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
 }
 
 .card {
@@ -50,6 +55,8 @@ body {
     background: linear-gradient(to right, #ffffff, #cbd5e0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    line-height: 1.2;       
+    padding-bottom: 4px;
 }
 
 /* subtitle text */
