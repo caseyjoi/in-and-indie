@@ -4,48 +4,51 @@
 
 **How you'll keep in touch with the hottest new games and communities on Steam.**
 
-**In and Indie** is a CLI that searches for the latest and hottest games on Steam and connects you with those you find most interesting. In and Indie presents a decluttered catalog of new games and their latest news.
+**In and Indie** is a locally hosted website that searches for indie  games on Steam based on a Steam account's most played games. In and Indie presents a decluttered list of indie game recommendations and quick links to their respective YouTube trailers, Steam Store pages, and community links.
 ___
 
 ## Who/what does this project interface with?
 
 ### People
-This project is designed for gamers and developers who want to keep in touch with the latest games and their communities. This is perfect for those who want to quickly check up on the video game industry.
+This project is meant for any gamers looking for new indie games to play. This project was designed to draw attention to and build community around indie games. 
 
 ### Systems (APIs)
 
-* **Steam Internal API**
+* ** YouTube Data API**
 * **Steam Web API**
 * **Brave Search API**
+* **IGDB API**
 
 
-### Hardware
+### Tech Stack
 
-Runs in your terminal!
+* **Frontend:** React, React Router
+* **Backend:** Flask
+* **Databases:** SQLite/SQLAlchemy
 
 ---
 ## Inputs
-Prompts the user to navigate through pages of lists, and allows users to select specifc games to view more information for.
+Takes in a Steam User ID (only functions if profile visibility is set to public).
 
 ## Outputs
-Outputs pages of upcoming video games and their summary, publishers, price, and release date. Once prompted, the program also returns the latest news for that game once prompted. 
+Outputs the Steam User's top 5 games based on playtime, and recommends the user 5 indie games along with the game's Steam Store page, YouTube trailer (if applicable), Reddit subreddit (if applicable), Discord community (if applicable), and Fandom page (if applicable).
 
 
 ---
 ## Step by Step
 
-1. USES Brave search API to find Steam Shop URLS of up and coming video games.
-2. STRIPS the URLS for game IDs.
-3. CROSS REFERENCES IDs with Steam Internal API to retrieve game metadata.
-4. STORES IDs and metadata in a database for fast access
-5. USES Steam Web API to return the latest update/news for selected games
+1. RECEIVES Steam User ID
+2. PULLS top 5 games and their tags
+3. SAVES game information in the database
+4. SEARCHES for game recommendations on IDGB based on game tags.
+5. USES YouTube API to search for trailers and Brave Search API to search for communities
+6. DISPLAYS information to user using React
 ---
 
 ## Risks
-There runs the possibility of being rate limited however we have mitigated it by accessing games from our database when needed.  
+There is a possibility of being rate-limited for APIs as API calls are frequent.
 
-## Success
-We consider this a success when it can:
-- Returns an updated list of up and coming steam games
-- Returns the latest news associated with the games
-- Presents a streamlined and decluttered experience for exploring new games
+## Future implementations
+* Improve UI and performance
+* Revamp product to include generality (removal of Steam dependency)
+* Make mobile friendly
