@@ -1,0 +1,308 @@
+
+   * {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #090e17 0%, #0d1527 100%);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    width: 100vw;
+}
+
+
+main {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px; 
+}
+
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 900px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+section h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.dashboard-wrapper {
+    background: linear-gradient(135deg, #090e17 0%, #0d1527 100%);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 40px 20px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;         
+    justify-content: flex-start; 
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* top games section */
+.top-games {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Spacing between each individual top game row */
+}
+
+.top-game {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(22, 33, 54, 0.4);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.game-cover-thumbnail {
+    width: 50px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 4px;
+    background-color: #1a202c; /* Fallback color while image loads */
+    flex-shrink: 0;
+}
+
+.top-game-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+}
+
+.top-game-details strong {
+    color: #ffffff;
+}
+
+.top-game-details span {
+    color: #a0aec0;
+}
+
+.top-game-details span::before {
+    content: "| ";
+    color: #4a5568;
+    margin-right: 4px;
+}
+
+
+/* reccomended games section */
+.rec-card {
+    background: rgba(22, 33, 54, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    padding: 24px;
+    gap: 24px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* hover aniamtion */
+.rec-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(66, 153, 225, 0.4);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* trailer/image wrapper */ 
+.rec-trailer-or-img {
+    width: 260px;
+    height: 146px; /* Perfect 16:9 aspect ratio standard for gaming screens */
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: #1a202c;
+}
+
+.rec-trailer-or-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* details content wrapper */
+.rec-card-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.rec-card-header .game-title {
+    font-size: 1.4rem;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+/* genre/tags row */
+.rec-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.tag {
+    background: rgba(66, 153, 225, 0.15);
+    color: #63b3ed;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+/* ratings */
+.rec-rating {
+    margin-bottom: 20px;
+}
+
+.rating {
+    font-size: 0.85rem;
+    color: #cbd5e0;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* buttons */
+.community-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto; 
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    text-transform: capitalize;
+}
+
+/* button highlight*/
+.btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* steam button is blue */
+.btn:first-child {
+    background: #1b2838;
+    color: #66c0f4;
+    border-color: #2a475e;
+}
+
+.btn:first-child:hover {
+    background: #2a475e;
+    color: #ffffff;
+}
+
+.card {
+    background: rgba(22, 33, 54, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* subtitle text */
+.card p {
+    color: #a0aec0;
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.card button {
+    width: 100%;
+    background: #1b2838; /* Uses Steam dark blue palette signature accent */
+    color: #66c0f4;
+    border: 1px solid #2a475e;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
+}
+
+.card button:hover {
+    background: #2a475e;
+    color: #ffffff;
+    border-color: #385d7c;
+}
+
+.card button:active {
+    transform: scale(0.98); 
+}
+
+.card button a {
+    color: inherit;         
+    text-decoration: none;   
+    display: inline-block;
+    width: 100%;            
+    height: 100%;
+}
+
+/* changes left/right structure to column for tight screens */
+@media (max-width: 680px) {
+    .rec-card {
+        flex-direction: column; 
+    }
+    
+    .rec-trailer-or-img {
+        width: 100%;
+        height: 180px;
+    }
+}
