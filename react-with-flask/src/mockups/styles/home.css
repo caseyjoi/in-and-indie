@@ -1,0 +1,110 @@
+
+   * {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #090e17 0%, #0d1527 100%);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+}
+
+.container {
+    width: 100%;
+    max-width: 500px; /
+    padding: 20px;
+}
+
+.card {
+    background: rgba(22, 33, 54, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* hover effect */
+.card:focus-within,
+.card:hover {
+    border-color: rgba(66, 153, 225, 0.2);
+    box-shadow: 0 15px 40px rgba(66, 153, 225, 0.05);
+}
+
+/* app name */
+.card h1 {
+    font-size: 2.4rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #ffffff, #cbd5e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* subtitle text */
+.card p {
+    color: #a0aec0;
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+/* button and input stuff */ 
+.card input[type="text"] {
+    width: 100%;
+    background: rgba(9, 14, 23, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+
+.card input[type="text"]:focus {
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+
+.card input[type="text"]::placeholder {
+    color: #4a5568;
+}
+
+.card button {
+    width: 100%;
+    background: #1b2838; /* Uses Steam dark blue palette signature accent */
+    color: #66c0f4;
+    border: 1px solid #2a475e;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
+}
+
+.card button:hover {
+    background: #2a475e;
+    color: #ffffff;
+    border-color: #385d7c;
+}
+
+.card button:active {
+    transform: scale(0.98); 
+}
