@@ -14,7 +14,7 @@ This project is meant for any gamers looking for new indie games to play. This p
 
 ### Systems (APIs)
 
-* ** YouTube Data API**
+* **YouTube Data API**
 * **Steam Web API**
 * **Brave Search API**
 * **IGDB API**
