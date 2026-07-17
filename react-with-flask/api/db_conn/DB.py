@@ -30,7 +30,7 @@ def save_to_db(steam_id):
     df["tag2"] = None
     df["tag3"] = None
     df["igdb_rating"] = None
-    df["trailer"] = None
+    # df["trailer"] = None
 
     cols = ["name",
             "appid",
@@ -39,8 +39,7 @@ def save_to_db(steam_id):
             "tag1",
             "tag2",
             "tag3",
-            "igdb_rating",
-            "trailer"]
+            "igdb_rating"] # removed "trailer"
     df = df[cols]
 
     df.to_sql('top5', con = engine, if_exists = 'append', index = False)
@@ -97,10 +96,10 @@ def update_game(steam_id, limit=5):
 
     df = _coerce_numeric(check_in_db(steam_id))
 
-    trailer_sql = text("""
-        UPDATE top5 SET trailer=:trailer
-         WHERE user_steam_id=:steam_id AND appid=:appid
-    """)
+    # trailer_sql = text("""
+    #     UPDATE top5 SET trailer=:trailer
+    #      WHERE user_steam_id=:steam_id AND appid=:appid
+    # """)
 
     df_sorted = df.sort_values("igdb_rating", ascending=False, na_position="last")
     top = df_sorted.head(limit) 
@@ -117,6 +116,7 @@ def update_game(steam_id, limit=5):
                     "steam_id": steam_id,
                     "appid": int(row["appid"]),
                 })
+        """
         if pd.isna(row["trailer"]):
             url = get_trailer_url(row["name"])
             if url:
@@ -126,6 +126,7 @@ def update_game(steam_id, limit=5):
                         "steam_id": steam_id,
                         "appid": int(row["appid"]),
                     })
+        """
 
     df = _coerce_numeric(check_in_db(steam_id))
     return df.sort_values("igdb_rating", ascending=False, na_position="last")
@@ -152,3 +153,51 @@ def aggregate_tags(steam_id: str) -> list:
     
     # We just want the string tags, not the counts, so we extract them
     return [item[0] for item in top_3_tuples]
+
+def check_recs_in_db(steam_id):
+    """Checks if recommendations for this user are already saved."""
+    engine = _default_engine()
+    query = "SELECT * FROM recommendations WHERE steam_id = :steam_id"
+    try:
+        df = pd.read_sql(query, con=engine, params={"steam_id": steam_id})
+        if df.empty:
+            return None
+            
+        # Remake the community links for the frontend
+        recs = df.to_dict(orient="records")
+        for r in recs:
+            r["community_links"] = []
+            if pd.notna(r.get("reddit")): r["community_links"].append({"platform": "reddit", "url": r["reddit"]})
+            if pd.notna(r.get("fandom")): r["community_links"].append({"platform": "fandom", "url": r["fandom"]})
+            if pd.notna(r.get("discord")): r["community_links"].append({"platform": "discord", "url": r["discord"]})
+            
+            # Clean up SQL columns
+            r.pop("reddit", None)
+            r.pop("fandom", None)
+            r.pop("discord", None)
+            r.pop("steam_id", None)
+            
+        return recs
+    except (OperationalError, DatabaseError):
+        return None
+
+def save_recs_to_db(steam_id, recommendations):
+    """Saves newly fetched recommendations to the database."""
+    engine = _default_engine()
+    
+    flat_recs = []
+    for r in recommendations:
+        flat = r.copy()
+        flat["steam_id"] = steam_id
+        
+        # Extract links into flat columns for SQL
+        flat["reddit"] = next((c["url"] for c in r.get("community_links", []) if c["platform"] == "reddit"), None)
+        flat["fandom"] = next((c["url"] for c in r.get("community_links", []) if c["platform"] == "fandom"), None)
+        flat["discord"] = next((c["url"] for c in r.get("community_links", []) if c["platform"] == "discord"), None)
+        
+        # Remove the nested list (SQL can't store a Python list natively)
+        flat.pop("community_links", None)
+        flat_recs.append(flat)
+
+    df = pd.DataFrame(flat_recs)
+    df.to_sql('recommendations', con=engine, if_exists='append', index=False)

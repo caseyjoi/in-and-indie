@@ -63,18 +63,64 @@ def get_recommendations(steam_id):
         if not top_tags:
             return jsonify({"error": "Not enough data to find favorite tags."}), 404
 
-        # Get recommendations from IGDB
-        recommendations = igdb.get_recommendations(top_tags)
+        cached_recs = DB.check_recs_in_db(steam_id)
 
-        # Add YouTube trailers
-        for rec in recommendations:
-            rec["trailer_url"] = get_trailer_url(rec["name"])
+        # Check if recommendations are already in the database before calling API's
+        if cached_recs:
+            print(f"Loaded Cached Recommendations for {steam_id}")
+            recommendations = cached_recs
+        else:
+            print(f"Fetching New Recommendations for {steam_id}...")
+            # Get recommendations from IGDB
+            recommendations = igdb.get_recommendations(top_tags)
+
+            # Add YouTube trailers and community links from Brave
+            for rec in recommendations:
+                rec["trailer_url"] = get_trailer_url(rec["name"])
+                
+                community_data = find_game_communities(rec["name"])
+                clean_communities = []
+
+                # Output is {"reddit": [...], "fandom": [...], "discord": [...]}, grab the Top 1 link to easily map them as buttons
+                for platform, links in community_data.items():
+                    if links and len(links) > 0:
+                        top_link = links[0]
+                        clean_communities.append({
+                            "platform": platform,
+                            "title": top_link.get("title"),
+                            "url": top_link.get("url")
+                        })
+                rec["community_links"] = clean_communities
+
+            # Save recommendations to the DB
+            DB.save_recs_to_db(steam_id, recommendations)
+
+        # Send the JSON to react
+        return jsonify({
+            "steam_id": steam_id,
+            "user_games": user_games,
+            "recommendations": recommendations
+        })
+    except Exception as e:
+        # If something crashes, send the error message to React so it can display it
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/random', methods=['GET'])
+def get_random_games():
+    """
+    Endpoint for the 'Random Indie Game' button.
+    Usage: fetch('/api/random')
+    """
+    try:
+        # 3 random games
+        random_games = igdb.get_random_indies(3)
+        
+        # Enrich with YouTube and Brave Communities
+        for game in random_games:
+            game["trailer_url"] = get_trailer_url(game["name"])
             
-            # Fetch community links from Brave
-            community_data = find_game_communities(rec["name"])
+            community_data = find_game_communities(game["name"])
             clean_communities = []
-            
-            # Output is {"reddit": [...], "fandom": [...], "discord": [...]}, grab the Top 1 link to easily map them as buttons
             for platform, links in community_data.items():
                 if links and len(links) > 0:
                     top_link = links[0]
@@ -83,18 +129,13 @@ def get_recommendations(steam_id):
                         "title": top_link.get("title"),
                         "url": top_link.get("url")
                     })
-                    
-            rec["community_links"] = clean_communities
+            game["community_links"] = clean_communities
 
-        # Send the JSON to react
         return jsonify({
-            "steam_id": steam_id,
-            "user_games": user_games,
-            "recommendations": recommendations
+            "random_games": random_games
         })
 
     except Exception as e:
-        # If something crashes, send the error message to React so it can display it
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":

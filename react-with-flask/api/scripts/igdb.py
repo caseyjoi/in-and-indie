@@ -1,5 +1,6 @@
 import os
 import requests
+import random
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -87,7 +88,7 @@ def get_recommendations(top_tags: list) -> list:
     final_where = " & ".join(where_parts)
 
     # Sort by total rating
-    body = f"fields name, total_rating, cover.image_id, genres.name, themes.name, game_type, platforms, websites.url, websites.type; where {final_where}; sort total_rating desc; limit 100;"
+    body = f"fields name, summary, total_rating, cover.image_id, genres.name, themes.name, game_type, platforms, websites.url, websites.type; where {final_where}; sort total_rating desc; limit 100;"
     print(f"DEBUG QUERY 1: {body}")
     response = requests.post("https://api.igdb.com/v4/games", headers=headers, data=body.encode('utf-8'))
     raw_data = response.json()
@@ -130,7 +131,7 @@ def get_recommendations(top_tags: list) -> list:
         if existing_ids:
             fallback_where += f" & id != ({','.join(existing_ids)})"
             
-        fallback_body = f"fields name, total_rating, cover.image_id, genres.name, themes.name, game_type, websites.url, websites.type; where {fallback_where}; sort total_rating desc; limit {needed_slots};"
+        fallback_body = f"fields name, summary, total_rating, cover.image_id, genres.name, themes.name, game_type, websites.url, websites.type; where {fallback_where}; sort total_rating desc; limit {needed_slots};"
         
         resp = requests.post("https://api.igdb.com/v4/games", headers=headers, data=fallback_body.encode('utf-8'))
         fallback_data = resp.json()
@@ -162,6 +163,7 @@ def get_recommendations(top_tags: list) -> list:
 
         clean_recommendations.append({
             "name": game.get("name", "Unknown Game"),
+            "summary": game.get("summary", "No description available."),
             "rating": formatted_rating,
             "cover_url": cover_url,
             "genres": genres_string,
@@ -169,3 +171,53 @@ def get_recommendations(top_tags: list) -> list:
         })
         
     return clean_recommendations
+
+def get_random_indies(count=3):
+    """Fetches a random batch of highly-rated indie games using pagination offset."""
+    client_id = os.getenv("IGDB_CLIENT_ID")
+    client_secret = os.getenv("IGDB_CLIENT_SECRET")
+
+    url = f"https://id.twitch.tv/oauth2/token?client_id={client_id}&client_secret={client_secret}&grant_type=client_credentials"
+    access_token = requests.post(url).json().get("access_token")
+
+    headers = {
+        'Client-ID': client_id,
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    # There are easily 300+ highly-rated indie games, pick a random starting point.
+    random_offset = random.randint(0, 300)
+    
+    where_clause = "genres = (32) & game_type = 0 & total_rating_count > 20 & platforms = (6)"
+    body = f"fields name, summary, total_rating, cover.image_id, genres.name, themes.name, websites.url, websites.type; where {where_clause}; sort total_rating desc; limit {count}; offset {random_offset};"
+    
+    response = requests.post("https://api.igdb.com/v4/games", headers=headers, data=body.encode('utf-8'))
+    raw_data = response.json()
+    
+    clean_randoms = []
+    if isinstance(raw_data, list):
+        for game in raw_data:
+            rating = game.get("total_rating")
+            
+            cover_data = game.get("cover", {})
+            image_id = cover_data.get("image_id")
+            
+            genres_list = game.get("genres", [])
+            genre_names = [g.get("name") for g in genres_list if g.get("name")]
+            
+            steam_url = "#" 
+            for site in game.get("websites", []):
+                if site.get("type") == 13:
+                    steam_url = site.get("url")
+                    break 
+
+            clean_randoms.append({
+                "name": game.get("name", "Unknown Game"),
+                "summary": game.get("summary", "No description available."),
+                "rating": round(rating / 10, 1) if rating else "N/A",
+                "cover_url": f"https://images.igdb.com/igdb/image/upload/t_cover_big/{image_id}.jpg" if image_id else "No cover available",
+                "genres": ", ".join(genre_names) if genre_names else "Indie",
+                "steam_link": steam_url
+            })
+            
+    return clean_randoms
