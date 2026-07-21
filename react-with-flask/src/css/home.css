@@ -123,3 +123,51 @@ body {
     width: 100%;            
     height: 100%;
 }
+
+/*dropdown */
+/* Container for the whole FAQ section */
+.faq-container {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+/* Individual question box */
+details {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* The question (the clickable button) */
+summary {
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #4a5568;
+  cursor: pointer;
+  list-style: none; /* Removes the default browser arrow */
+  transition: background 0.3s;
+}
+
+
+/* Custom dropdown arrow */
+summary::after {
+  content: '▼'; /* Down arrow */
+  float: right;
+  font-size: 14px;
+}
+
+/* Rotates the arrow when the dropdown is open */
+details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+/* The answer text */
+.faq-content {
+  text-align: left;
+  padding: 10px;
+  font-size: 15px;
+  color: #4a5568;
+  line-height: 1.5;
+}

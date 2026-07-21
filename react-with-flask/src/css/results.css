@@ -121,6 +121,9 @@ section h2 {
     padding: 24px;
     gap: 24px;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;       /* Centers the image vertically */
+    justify-content: center;   /* Optional: Centers the image horizontally */
 }
 
 /* hover aniamtion */
@@ -137,6 +140,7 @@ section h2 {
     border-radius: 8px;
     overflow: hidden;
     flex-shrink: 0;
+
     background-color: #1a202c;
 }
 
@@ -167,6 +171,7 @@ section h2 {
     margin-bottom: 8px;
 }
 
+
 .tag {
     background: rgba(66, 153, 225, 0.15);
     color: #63b3ed;
@@ -175,6 +180,24 @@ section h2 {
     border-radius: 6px;
     font-weight: 500;
     text-transform: capitalize;
+}
+
+.rec-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+
+.summary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    line-height: 1.2
 }
 
 /* ratings */

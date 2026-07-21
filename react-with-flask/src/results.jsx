@@ -179,10 +179,9 @@ function Results() {
     const navigator = useNavigate();
 
 
+
     useEffect(() => {
-        //Commented out actual API call
-        //current hardcoding a specific steam USER -> implement fetch(`/api/events/${day}`) format
-        //define async fetch function 
+
         const fetchData = async () => {
             try {
                 setIsLoading(true);
@@ -222,6 +221,8 @@ function Results() {
         setError("There was an error with the userid.")
     }
     */
+
+    //loads loading page
     if (isLoading) {
 
         return (
@@ -238,7 +239,7 @@ function Results() {
 
         )
     }
-
+    //loads error page
     if (error) {
         return (
             <>
@@ -257,6 +258,8 @@ function Results() {
         )
     }
 
+
+    //loads recommendation page
     return (
         <>
             {/*<pre>{JSON.stringify(top5Games, null, 2)}</pre>*/}
@@ -315,6 +318,10 @@ function Results() {
 
                                 <div className="rec-tags">
                                     <span className="tag"> genre: {rec.genres} </span>
+                                </div>
+
+                                 <div className="rec-summary">
+                                    <span className="summary"> {rec.summary} </span>
                                 </div>
 
                                 <div className="rec-rating">
