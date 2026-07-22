@@ -1,14 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
    * {
     box-sizing: border-box;
 }
 
 body {
-    background: linear-gradient(135deg, #090e17 0%, #0d1527 100%);
+
+    background: linear-gradient(135deg, #161932 0%, #0d1527 100%);
     color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
     margin: 0;
-    padding: 20px;
+    padding: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,44 +31,53 @@ body {
 }
 
 .card {
-    background: rgba(22, 33, 54, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent;
+    border: transparent;
     border-radius: 12px;
     padding: 40px 30px;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
     display: flex;
     flex-direction: column;
-    gap: 20px; 
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    gap: 10px; 
+    transition: none;
 }
 
 /* hover effect */
 .card:focus-within,
 .card:hover {
-    border-color: rgba(66, 153, 225, 0.2);
-    box-shadow: 0 15px 40px rgba(66, 153, 225, 0.05);
+    border-color: none;
+    box-shadow: none;
 }
 
 /* app name */
 .card h1 {
-    font-size: 2.4rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 3.5rem;
     margin: 0;
+    width: 100%;
     font-weight: 700;
-    letter-spacing: -0.5px;
-    background: linear-gradient(to right, #ffffff, #cbd5e0);
+    letter-spacing: -2px;
+    background: linear-gradient(to right, #ffffff, #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.2;       
-    padding-bottom: 4px;
+    padding-bottom: 0px;
 }
 
 /* subtitle text */
 .card p {
-    color: #a0aec0;
-    font-size: 1rem;
-    margin: 0 0 10px 0;
+    color: linear-gradient(to right, #ffffff, #cbdfff);
+    font-size: 1.2rem;
+    margin: 10px 0 0px 0;
     line-height: 1.5;
+}
+
+.one-line{
+    color: linear-gradient(to right, #ffffff, #cbdfff);
+    font-size: 1.2rem;
+    margin: 10px 10px 10px 0;
+    line-height: 0;
 }
 
 /* button and input stuff */ 
@@ -74,8 +87,9 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
     padding: 14px 16px;
-    border-radius: 8px;
+    border-radius: 25px;
     font-size: 0.95rem;
+    font-weight: 200;
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -83,20 +97,20 @@ body {
 
 
 .card input[type="text"]:focus {
-    border-color: #63b3ed;
+    border-color: #6373ed;
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
 }
 
 
 .card input[type="text"]::placeholder {
-    color: #4a5568;
+    color: #6f7096;
 }
 
 .card button {
     width: 100%;
-    background: #1b2838; /* Uses Steam dark blue palette signature accent */
-    color: #66c0f4;
-    border: 1px solid #2a475e;
+    background: #343857; /* Uses Steam dark blue palette signature accent */
+    color: #b8bae3;
+    border: 1px solid #6c63a4;
     padding: 14px 20px;
     border-radius: 8px;
     font-size: 1rem;
@@ -107,9 +121,9 @@ body {
 }
 
 .card button:hover {
-    background: #2a475e;
+    background: #6373ed;
     color: #ffffff;
-    border-color: #385d7c;
+    border-color: #41419e;
 }
 
 .card button:active {
@@ -122,6 +136,10 @@ body {
     display: inline-block;
     width: 100%;            
     height: 100%;
+}
+
+.in-row{
+    display: flex;
 }
 
 /*dropdown */
@@ -141,13 +159,14 @@ details {
 
 /* The question (the clickable button) */
 summary {
-  padding: 10px;
+  padding: 8px;
   font-size: 14px;
   font-weight: bold;
-  color: #4a5568;
+  color: #B1B9FF;
   cursor: pointer;
-  list-style: none; /* Removes the default browser arrow */
+  list-style: none;
   transition: background 0.3s;
+  text-decoration: underline;
 }
 
 
@@ -166,8 +185,17 @@ details[open] summary::after {
 /* The answer text */
 .faq-content {
   text-align: left;
-  padding: 10px;
+  padding: 0px 10px;
   font-size: 15px;
   color: #4a5568;
   line-height: 1.5;
+}
+
+.faq-content p {
+  text-align: left;
+  padding: 10px;
+  font-size: 15px;
+  color: #8185ab;
+  line-height: 1.2;
+  font-size: 1rem;
 }
